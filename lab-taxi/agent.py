@@ -5,17 +5,20 @@ from collections import defaultdict
 
 class Agent:
 
-    def __init__(self, nA=6, alpha=0.01, gamma=1,
-                 epsilon_init=1, epsilon_decay=0.999):
+    def __init__(self, nA=6, alpha=0.05, gamma=1,
+                 epsilon_init=1, epsilon_decay=0.99):
         """ Initialize agent.
 
         Params
         ======
         - nA: number of actions available to the agent
         """
+        print(f'alpha={alpha}, gamma={gamma}, ', end='')
+        print(f'epsilon_init={epsilon_init}, epsilon_decay={epsilon_decay}.')
         self.nA = nA
         self.Q = defaultdict(lambda: np.zeros(self.nA))
         self.epsilon = epsilon_init
+        self.epsilon_decay = epsilon_decay
         self.alpha = alpha
         self.gamma = gamma
 
@@ -50,3 +53,6 @@ class Agent:
         max_q_of_next_state = max(self.Q[next_state]) if not done else 0
         approx_return = reward + self.gamma * max_q_of_next_state
         self.Q[state][action] += self.alpha * (approx_return - self.Q[state][action])
+
+        if done:  # update epsilon
+            self.epsilon *= self.epsilon_decay

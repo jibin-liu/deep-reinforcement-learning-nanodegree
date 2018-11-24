@@ -29,3 +29,16 @@ Your assignment is to modify the `agents.py` file to improve the agent's perform
 Once you have modified the function, you need only run `python main.py` to test your new agent.
 
 OpenAI Gym [defines "solving"](https://gym.openai.com/envs/Taxi-v1/) this task as getting average return of 9.7 over 100 consecutive trials.  
+
+
+### TD methods and parameters
+#### Tuning Q_learning
+1. if using constant value of epsilon, a smaller value (e.g., `0.05`) will yield a much better result than a larger value (e.g., `1`); if using decayed epsilon, then the initial value of epsilon can be `1`. Both using a small constant value of epsilon or a decayed value will yield average return of `9.1` after 20k episodes
+2. Updating alpha from `0.01` to `0.05` greatly speeds up the learning process (i.e., average return becomes positive after around 3.5k episodes), comparing to previous result of getting positive return after 9k episodes. And the average return after 20k episodes increased from `9.1` to `9.45`.
+3. Change decayed epsilon to contant epsilon slightly decreased the average return after 20k episodes (from `9.4` to `9.1`).
+4. Changing gamma from `1` to `0.9` doesn't seem to help improve the performance. The performace is actually decreased.
+5. So the final parameter for q_learning is set to be:
+    - alpha = 0.05,
+    - gamma = 1,
+    - epsilon_init = 1,
+    - epsilon_decay = 0.99
