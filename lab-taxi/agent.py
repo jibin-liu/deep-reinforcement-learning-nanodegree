@@ -5,7 +5,8 @@ from collections import defaultdict
 
 class Agent:
 
-    def __init__(self, nA=6, epsilon_init=1, epsilon_decay=0.999):
+    def __init__(self, nA=6, alpha=0.01, gamma=1,
+                 epsilon_init=1, epsilon_decay=0.999):
         """ Initialize agent.
 
         Params
@@ -15,6 +16,8 @@ class Agent:
         self.nA = nA
         self.Q = defaultdict(lambda: np.zeros(self.nA))
         self.epsilon = epsilon_init
+        self.alpha = alpha
+        self.gamma = gamma
 
     def select_action(self, state):
         """ Given the state, select an action.
@@ -33,7 +36,7 @@ class Agent:
             return random.choice(np.arange(self.nA))
 
     def step(self, state, action, reward, next_state, done):
-        """ Update the agent's knowledge, using the most recently sampled tuple.
+        """ Update the agent's knowledge using q_learning, using the most recently sampled tuple.
 
         Params
         ======
@@ -43,4 +46,7 @@ class Agent:
         - next_state: the current state of the environment
         - done: whether the episode is complete (True or False)
         """
-        self.Q[state][action] += 1
+
+        max_q_of_next_state = max(self.Q[next_state]) if not done else 0
+        approx_return = reward + self.gamma * max_q_of_next_state
+        self.Q[state][action] += self.alpha * (approx_return - self.Q[state][action])
