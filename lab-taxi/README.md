@@ -42,3 +42,12 @@ OpenAI Gym [defines "solving"](https://gym.openai.com/envs/Taxi-v1/) this task a
     - gamma = 1,
     - epsilon_init = 1,
     - epsilon_decay = 0.99
+
+#### Tuning Expected Sarsa
+1. With alpha equals to `1` and other parameters the same as q_learning, expected_sarsa get positive reward (after about 1.5k episodes) faster than q_learning (after 3.5k episodes). However the final average return after 20k episodes doesn't differ too much.
+2. Having a smaller value (e.g., `0.05`) for `epsilon_init` will make the model to achieve positive return faster than a larger value (e.g., `1`), however, looks like larger initial value will help the agent to explore and achiever better final average return after 20k episodes.
+3. So the final parameter for expected_sarsa is set to be:
+    - alpha = 1,
+    - gamma = 1,
+    - epsilon_init = 1,
+    - epsilon_decay = 0.999
